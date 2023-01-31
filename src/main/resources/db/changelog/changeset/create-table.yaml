@@ -1,0 +1,27 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-table
+      author: Rudko Bogdan
+      changes:
+        - createTable:
+            tableName: companies
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: companyName
+                  type: varchar(100)
+              - column:
+                  name: volume
+                  type: bigint
+              - column:
+                  name: previousVolume
+                  type: bigint
+              - column:
+                  name: latestPrice
+                  type: decimal
