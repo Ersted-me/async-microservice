@@ -1,6 +1,5 @@
-package ru.ersted.asyncmicroservice.dto;
+package ru.ersted.asyncmicroservice.model;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
@@ -11,7 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class CompanyDto {
+public class Company {
     @Id
     private Long id;
     private String companyName;
