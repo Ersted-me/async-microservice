@@ -14,14 +14,14 @@ databaseChangeLog:
                     primaryKey: true
                     nullable: false
               - column:
-                  name: companyName
+                  name: company_name
                   type: varchar(100)
               - column:
                   name: volume
                   type: bigint
               - column:
-                  name: previousVolume
+                  name: previous_volume
                   type: bigint
               - column:
-                  name: latestPrice
+                  name: latest_price
                   type: decimal
