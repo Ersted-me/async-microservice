@@ -15,7 +15,7 @@ databaseChangeLog:
                     nullable: false
               - column:
                   name: company_name
-                  type: varchar(100)
+                  type: varchar(255)
               - column:
                   name: volume
                   type: bigint
@@ -24,4 +24,7 @@ databaseChangeLog:
                   type: bigint
               - column:
                   name: latest_price
+                  type: decimal
+              - column:
+                  name: percent_cost
                   type: decimal
