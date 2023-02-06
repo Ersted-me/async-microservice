@@ -1,16 +1,19 @@
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/root
-    name: root
-    password: root
+    url: ${DB_HOST}://${DB_DOMAIN}/root
+    name: ${DB_NAME}
+    password: ${DB_PASSWORD}
 
   liquibase:
     change-log: classpath:db/changelog/db.changelog-master.yaml
-    enabled: false
+    enabled: true
 
 server:
   port: 8081
 
-web:
-  token: pk_fcea97f9cebd413cb828fbce9730dffc
+custom:
+  iex:
+    protocol: ${IEX_PROTOCOL}
+    host: ${IEX_HOST}
+    token: ${IEX_TOKEN}
