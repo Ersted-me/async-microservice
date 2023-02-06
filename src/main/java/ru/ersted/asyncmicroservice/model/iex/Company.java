@@ -17,4 +17,6 @@ public class Company {
     private Long volume;
     private Long previousVolume;
     private Double latestPrice;
+    private Double percentCost;
+
 }
