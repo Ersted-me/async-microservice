@@ -29,7 +29,6 @@ public class IEXApi {
 
     public List<Symbol> getSymbolsList() {
         URL url = new URL(IEX_PROTOCOL, IEX_HOST, PATH_TO_SYMBOLS, "token=" + TOKEN);
-        System.out.println(url);
         ResponseEntity<Symbol[]> response = restTemplate.getForEntity(url.toString(), Symbol[].class);
         return response.getBody() != null ? Arrays.asList(response.getBody()) : Collections.emptyList();
     }
