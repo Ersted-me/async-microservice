@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 @Builder
 @Getter
 @Setter
+@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 public class SymbolDto {
@@ -17,7 +18,7 @@ public class SymbolDto {
     private String exchangeSegment;
     private String exchangeSegmentName;
     private String name;
-    private LocalDateTime date;
+    private String date;
     private String type;
     private String iexId;
     private String region;

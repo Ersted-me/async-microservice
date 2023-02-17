@@ -11,7 +11,6 @@ import lombok.Setter;
 @Getter
 @Setter
 @MappedSuperclass
-@Entity
 public class BaseEntity {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)

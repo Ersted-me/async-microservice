@@ -1,10 +1,10 @@
 databaseChangeLog:
   - changeSet:
-      id: create-table
+      id: createTableStock-1
       author: Rudko Bogdan
       changes:
         - createTable:
-            tableName: company
+            tableName: stock
             columns:
               - column:
                   name: id
@@ -16,15 +16,17 @@ databaseChangeLog:
               - column:
                   name: company_name
                   type: varchar(255)
-              - column:
-                  name: volume
-                  type: bigint
+                  constraints:
+                    unique: true
               - column:
                   name: previous_volume
+                  type: bigint
+              - column:
+                  name: volume
                   type: bigint
               - column:
                   name: latest_price
                   type: decimal
               - column:
-                  name: percent_cost
+                  name: profitability
                   type: decimal
