@@ -1,4 +1,4 @@
-package ru.ersted.asyncmicroservice.api;
+package ru.ersted.asyncmicroservice.client;
 
 import org.springframework.boot.test.context.SpringBootTest;
 
