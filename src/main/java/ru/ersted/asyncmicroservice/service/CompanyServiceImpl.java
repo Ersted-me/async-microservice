@@ -1,14 +1,19 @@
 package ru.ersted.asyncmicroservice.service;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.Query;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import ru.ersted.asyncmicroservice.client.IEXApiClient;
 import ru.ersted.asyncmicroservice.dto.StockDto;
+import ru.ersted.asyncmicroservice.entity.StockEntity;
 import ru.ersted.asyncmicroservice.mapper.StockMapper;
 import ru.ersted.asyncmicroservice.repository.CompanyRepository;
+import ru.ersted.asyncmicroservice.utils.Partition;
 
 import java.util.*;
 import java.util.concurrent.*;
@@ -23,39 +28,35 @@ public class CompanyServiceImpl implements CompanyService {
     private final CompanyRepository companyRepository;
     private final IEXApiClient iexApiClient;
 
+    private final EntityManager entityManager;
+    @Value("${spring.jpa.properties.hibernate.jdbc.batch_size}")
+    private int chunckSize;
+
 
     @Override
     public void processCompanies() {
 
-         iexApiClient.getSymbolsList()
-                 .thenApply(HttpEntity::getBody)
-                 .thenApply(array ->
-                        {
-                            List<CompletableFuture<ResponseEntity<StockDto>>> futuresTask = new ArrayList<>(array.length);
-                            Arrays.stream(array)
-                                    .forEach(symbol -> futuresTask.add(iexApiClient.getCompanyDataBySymbol(symbol.getSymbol())));
-                            return futuresTask;
-                        })
-                 .thenApply(list -> list.stream()
-                         .map(CompletableFuture::join)
-                         .map(HttpEntity::getBody)
-                         .filter(Objects::nonNull)
-                         .map(StockMapper::toEntity)
-                         .collect(Collectors.toList())
-                 )
-         ;
-
-        //List<SymbolDto> symbolDtos = Arrays.stream(futureSymbolDto.join()).collect(Collectors.toList());
-
-        //List<CompletableFuture<ResponseEntity<StockDto>>> futuresTask = new ArrayList<>(symbolDtos.size());
-
-        //symbolDtos.forEach(symbol -> futuresTask.add(iexApiClient.getCompanyDataBySymbol(symbol.getSymbol())));
-        /*futuresTask.stream()
-                .map(CompletableFuture::join)
-                .map(HttpEntity::getBody)
-                .filter(Objects::nonNull)
-                .map(StockMapper::toEntity)
-                .collect(Collectors.toList());*/
+        iexApiClient.getSymbolsList()
+                .thenApply(HttpEntity::getBody)
+                .thenApply(array -> {
+                    List<CompletableFuture<ResponseEntity<StockDto>>> futuresTask = new ArrayList<>();
+                    Arrays.stream(array)
+                            .forEach(symbol -> futuresTask.add(iexApiClient.getCompanyDataBySymbol(symbol.getSymbol())));
+                    return futuresTask;
+                })
+                .thenApply(list -> list.stream()
+                        .map(re -> re.thenApply(HttpEntity::getBody))
+                        .filter(Objects::nonNull)
+                        .map(cDto -> cDto.thenApply(StockMapper::toEntity))
+                        .collect(Collectors.toList())
+                )
+                .thenAcceptAsync(list -> Partition.ofSize(list, chunckSize)
+                        .forEach(e ->
+                                e.forEach(secf -> {
+                                    List<StockEntity> stockEntityList = new ArrayList<>();
+                                    secf.thenAccept(stockEntityList::add);
+                                    System.out.println(stockEntityList.size());
+                                })));
 
         //1. Get all companies
         //2. Using async and paral... get the data for all Stocks

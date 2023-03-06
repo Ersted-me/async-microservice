@@ -5,6 +5,12 @@ spring:
     username: root #${DB_USERNAME}
     password: root #${DB_PASSWORD}
 
+  jpa:
+    properties:
+      hibernate:
+        jdbc:
+          batch_size: 1000
+
   liquibase:
     change-log: classpath:db/changelog/db.changelog-master.yaml
     enabled: true
