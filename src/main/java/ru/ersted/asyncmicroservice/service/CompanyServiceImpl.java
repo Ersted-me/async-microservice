@@ -17,6 +17,7 @@ import ru.ersted.asyncmicroservice.utils.Partition;
 
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 
@@ -29,8 +30,8 @@ public class CompanyServiceImpl implements CompanyService {
     private final IEXApiClient iexApiClient;
 
     private final EntityManager entityManager;
-    @Value("${spring.jpa.properties.hibernate.jdbc.batch_size}")
-    private int chunckSize;
+    //@Value("${spring.jpa.properties.hibernate.jdbc.batch_size}")
+    private int chunckSize = 10;
 
 
     @Override
@@ -41,6 +42,7 @@ public class CompanyServiceImpl implements CompanyService {
                 .thenApply(array -> {
                     List<CompletableFuture<ResponseEntity<StockDto>>> futuresTask = new ArrayList<>();
                     Arrays.stream(array)
+                            .limit(30)
                             .forEach(symbol -> futuresTask.add(iexApiClient.getCompanyDataBySymbol(symbol.getSymbol())));
                     return futuresTask;
                 })
@@ -50,13 +52,17 @@ public class CompanyServiceImpl implements CompanyService {
                         .map(cDto -> cDto.thenApply(StockMapper::toEntity))
                         .collect(Collectors.toList())
                 )
-                .thenAcceptAsync(list -> Partition.ofSize(list, chunckSize)
-                        .forEach(e ->
-                                e.forEach(secf -> {
+                .thenAccept(list -> Partition.ofSize(list, chunckSize)
+                        .forEach(e -> CompletableFuture
+                                .supplyAsync(() -> {
                                     List<StockEntity> stockEntityList = new ArrayList<>();
-                                    secf.thenAccept(stockEntityList::add);
-                                    System.out.println(stockEntityList.size());
-                                })));
+                                    e.forEach(secf -> {
+                                        secf.thenAccept(stockEntityList::add);
+                                        //System.out.println(stockEntityList.size());
+                                    });
+                                    return stockEntityList;
+                                })
+                                .thenAccept(stockEntityList -> companyRepository.saveAll(stockEntityList))));
 
         //1. Get all companies
         //2. Using async and paral... get the data for all Stocks

@@ -17,7 +17,7 @@ databaseChangeLog:
                   name: company_name
                   type: varchar(255)
                   constraints:
-                    unique: true
+                    unique: false #todo set true
               - column:
                   name: previous_volume
                   type: bigint

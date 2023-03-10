@@ -38,7 +38,7 @@ public class IEXApiClient {
     @Async
     public CompletableFuture<ResponseEntity<StockDto>> getCompanyDataBySymbol(String symbol) {
         //TODO: add async and parallel calculation
-        log.info("Getting company by {}", symbol);
+        //log.info("Getting company by {}", symbol);
         return CompletableFuture.supplyAsync(
                 () -> restTemplate.getForEntity(
                         String.format(IEX_URL + PATH_TO_STOCK_DATA + "?token=" + TOKEN, symbol), StockDto.class));
