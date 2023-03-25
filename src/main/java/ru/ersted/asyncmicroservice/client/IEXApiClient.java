@@ -39,9 +39,16 @@ public class IEXApiClient {
     public CompletableFuture<ResponseEntity<StockDto>> getCompanyDataBySymbol(String symbol) {
         //TODO: add async and parallel calculation
         //log.info("Getting company by {}", symbol);
-        return CompletableFuture.supplyAsync(
-                () -> restTemplate.getForEntity(
-                        String.format(IEX_URL + PATH_TO_STOCK_DATA + "?token=" + TOKEN, symbol), StockDto.class));
+        return CompletableFuture.supplyAsync(() ->
+                restTemplate.getForEntity(
+                                String.format(IEX_URL + PATH_TO_STOCK_DATA + "?token=" + TOKEN, symbol), StockDto.class))
+                .handle((res, ex) -> {
+                    if (ex != null) {
+                        log.warn("Symbol: {} has problem {}", symbol, ex.getCause().getMessage());
+                        return null;
+                    }
+                    return res;
+                });
     }
 
 
