@@ -13,16 +13,9 @@ import java.util.concurrent.Executors;
 @Configuration
 public class AppConfig {
 
-    @Value("${app.threads.amount}")
-    private Integer threadsAmount;
-
     @Bean
     public RestTemplate restTemplate() {
         return new RestTemplate();
     }
 
-    /*@Bean
-    public ExecutorService executorService() {
-        return Executors.newWorkStealingPool(threadsAmount);
-    }*/
 }

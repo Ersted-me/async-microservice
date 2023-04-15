@@ -1,35 +1,25 @@
 package ru.ersted.asyncmicroservice.utils;
 
+import ru.ersted.asyncmicroservice.entity.StockEntity;
 import ru.ersted.asyncmicroservice.entity.SymbolEntity;
 
+import java.util.Arrays;
 import java.util.List;
 public class ConsoleUtils {
-    /*public static void viewAllCompaniesData(List<SymbolEntity> companies) {
-        System.out.printf("%-10s %-10s %-10s %-10s %-10s\n",
-                "Volume", "PreviousVolume", "LatestPrice", "PercentCost","CompanyName");
+
+    public static void viewAllCompaniesData(List<StockEntity> companies, String title) {
+        System.out.println(title);
+        System.out.printf("%-15s %-15s %-15s %-15s %-15s\n",
+                "Volume", "PreviousVolume", "LatestPrice", "Profitability","CompanyName");
 
         companies.forEach(company ->
-                System.out.printf("%-10s %-14s %-11s %-11s %-10s\n",
+                System.out.printf("%-15s %-15s %-15s %-15s %-15s\n",
                         company.getVolume(),
                         company.getPreviousVolume(),
                         company.getLatestPrice(),
-                        company.getPercentCost(),
+                        company.getProfitability(),
                         company.getCompanyName()));
-    }
-
-    public static void viewMostExpensiveCompanies(List<SymbolEntity> companies) {
-        System.out.println("The Most Expensive Companies");
-        System.out.printf("%-10s %-10s %-10s %-10s %-10s\n",
-                "Volume", "PreviousVolume", "LatestPrice", "PercentCost","CompanyName");
-
-        companies.forEach(company ->
-                System.out.printf("%-10s %-14s %-11s %-11s %-10s\n",
-                        company.getVolume(),
-                        company.getPreviousVolume(),
-                        company.getLatestPrice(),
-                        company.getPercentCost(),
-                        company.getCompanyName()));
-
+        
         System.out.println();
-    }*/
+    }
 }

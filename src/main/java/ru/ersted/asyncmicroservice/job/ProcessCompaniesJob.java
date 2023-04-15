@@ -14,10 +14,7 @@ public class ProcessCompaniesJob {
 
     private final CompanyService companyService;
 
-    //cron = "5 * * * * *"
-    // 1. 750383
-    // 2. 769289
-    @Scheduled(initialDelay = 1000L, fixedDelay = 5000L)
+    @Scheduled(initialDelay = 1000L, fixedDelay = 15000L)
     public void processStocks() {
         companyService.processCompanies();
     }
