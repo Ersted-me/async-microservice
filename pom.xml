@@ -12,7 +12,7 @@
 
     <groupId>ru.ersted</groupId>
     <artifactId>async-microservice</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0.0</version>
     <name>async-microservice</name>
     <description>async-microservice</description>
 

@@ -36,7 +36,7 @@ public class IEXApiClient {
                 .handle((res, ex) -> {
                     if (ex != null) {
                         log.warn("getSymbolsList: the companies were not received.");
-                        return new ResponseEntity<>(null, null);
+                        return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
                     }
                     log.info("getSymbolsList: the companies were received.");
                     return res;
@@ -51,7 +51,7 @@ public class IEXApiClient {
                 .handle((res, ex) -> {
                     if (ex != null) {
                         log.warn("getCompanyDataBySymbol: {} has problem {}", symbol, ex.getCause().getMessage());
-                        return new ResponseEntity<>(null, null);
+                        return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
                     }
                     log.info("getCompanyDataBySymbol: {}", symbol);
                     return res;

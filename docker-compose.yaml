@@ -1,19 +1,28 @@
-# Use postgres/example user/password credentials
 version: '3.1'
 
 services:
 
-  db:
+  local-postgresql-db:
     image: postgres:13
+    container_name: local-postgresql-db
     ports:
       - "5432:5432"
     environment:
-      POSTGRES_USER: root
-      POSTGRES_PASSWORD: root
+      POSTGRES_DB: "root"
+      POSTGRES_USER: "root"
+      POSTGRES_PASSWORD: "root"
 
-
-  adminer:
-    image: adminer
-    restart: always
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: async-microservice
+    environment:
+      IEX_TOKEN: "pk_d79202ec6a354c12953634bf1df59105"
+      DB_URL: "jdbc:postgresql://local-postgresql-db/root"
+      DB_USERNAME: "root"
+      DB_PASSWORD: "root"
     ports:
       - "8080:8080"
+    depends_on:
+      - local-postgresql-db

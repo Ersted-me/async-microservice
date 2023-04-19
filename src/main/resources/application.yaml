@@ -1,7 +1,7 @@
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/root #${DB_HOST}://${DB_DOMAIN}/root
+    url: ${DB_URL}
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
 
@@ -19,13 +19,14 @@ spring:
     enabled: true
 
 server:
-  port: 8081
+  port: 8080
 
 custom:
   iex:
     url: https://cloud.iexapis.com/
-    token: ${IEX_TOKEN} #pk_d79202ec6a354c12953634bf1df59105
+    token: ${IEX_TOKEN}
 
 logging:
   level:
-    ru.ersted.asyncmicroservice.client.IEXApiClient: off
+    ru.ersted.asyncmicroservice.client.IEXApiClient: info
+    ru.ersted.asyncmicroservice.repository.impl.StockRepositoryImpl: info
